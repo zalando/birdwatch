@@ -1,13 +1,14 @@
 build_steps:
-- desc: Install dependencies
+- desc: Install docker
   cmd: |
     apt-get update
-    apt-get install -y apt-transport-https ca-certificates curl openjdk-8-jdk
-    curl -sSL https://get.docker.com/ | sh
+    apt-get install -y apt-transport-https ca-certificates curl software-properties-common
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+    add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) edge"
+    apt-get update
+    apt-get install -y docker-ce
 - desc: Build and push docker image
   cmd: |
     image=registry-write.opensource.zalan.do/opensource/catwatch:${CDP_BUILD_VERSION}
-    cd catwatch-backend
-    ../mvnw --batch-mode package
     docker build -t $image .
     docker push $image
