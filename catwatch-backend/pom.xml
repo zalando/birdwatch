@@ -187,18 +187,33 @@
             </plugin>
 
             <plugin>
-                <artifactId>exec-maven-plugin</artifactId>
-                <groupId>org.codehaus.mojo</groupId>
-                <version>1.4.0</version>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>2.19</version>
                 <executions>
                     <execution>
-                        <id>Generate scm-source.json</id>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>1.12</version>
+                <executions>
+                    <execution>
+                        <id>test</id>
                         <phase>generate-sources</phase>
                         <goals>
-                            <goal>exec</goal>
+                            <goal>add-source</goal>
                         </goals>
                         <configuration>
-                            <executable>${basedir}/etc/scm/scm-source.sh</executable>
+                            <sources>
+                                <source>${basedir}/target/generated-sources</source>
+                            </sources>
                         </configuration>
                     </execution>
                 </executions>
